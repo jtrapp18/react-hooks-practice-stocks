@@ -1,13 +1,22 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Stock from "./Stock";
 
-function PortfolioContainer() {
+function PortfolioContainer({portfolio, onStockClick, filterTxt, sortBy}) {
+
+  const filteredStocks = (filterTxt==="")? portfolio : portfolio.filter(p=>p.type===filterTxt);
+  const sortedStocked = filteredStocks.sort((a, b) => 
+    typeof a[sortBy] === "string" ? a[sortBy].localeCompare(b[sortBy]) : a[sortBy] - b[sortBy]);
+
   return (
     <div>
       <h2>My Portfolio</h2>
-      {
-        //render your portfolio stocks here
-      }
+        {sortedStocked.map(stock=>
+          <Stock
+            key={stock.id}
+            stock={stock}
+            onStockClick={onStockClick}
+          />
+        )}
     </div>
   );
 }
